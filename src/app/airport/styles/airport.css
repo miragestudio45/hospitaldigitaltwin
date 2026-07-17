@@ -1,0 +1,131 @@
+.airport-platform {
+  --airport-bg: #04101e;
+  background:
+    radial-gradient(circle at 50% -20%, rgba(24, 113, 153, .16), transparent 42%),
+    linear-gradient(180deg, #061423 0%, #030b15 100%);
+  color: #dbeafe;
+}
+
+.airport-platform::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: .12;
+  background-image:
+    linear-gradient(rgba(56, 189, 248, .08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(56, 189, 248, .08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black, transparent 72%);
+}
+
+.airport-button,
+.airport-icon-button,
+.airport-select {
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.035);
+  color: #94a3b8;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+
+.airport-button {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  border-radius: .5rem;
+  padding: .48rem .7rem;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.airport-icon-button {
+  display: inline-grid;
+  height: 34px;
+  width: 34px;
+  place-items: center;
+  border-radius: .55rem;
+}
+
+.airport-button:hover,
+.airport-icon-button:hover,
+.airport-select:hover {
+  border-color: rgba(34,211,238,.28);
+  background: rgba(34,211,238,.08);
+  color: #cffafe;
+}
+
+.airport-button:disabled,
+.airport-icon-button:disabled { opacity: .35; cursor: not-allowed; }
+
+.airport-select {
+  border-radius: .5rem;
+  padding: .47rem .65rem;
+  font-size: 9px;
+  outline: none;
+}
+
+.airport-select option { background: #071426; color: #cbd5e1; }
+
+.airport-scrollbar { scrollbar-width: thin; scrollbar-color: #164e63 transparent; }
+.airport-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+.airport-scrollbar::-webkit-scrollbar-thumb { border-radius: 999px; background: #164e63; }
+.airport-scrollbar::-webkit-scrollbar-track { background: transparent; }
+
+.spatial-layer-scrollbar { scrollbar-width: thin; scrollbar-color: rgba(34,211,238,.42) transparent; }
+.spatial-layer-scrollbar::-webkit-scrollbar { width: 3px; }
+.spatial-layer-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.spatial-layer-scrollbar::-webkit-scrollbar-thumb { border-radius: 999px; background: rgba(34,211,238,.42); }
+.spatial-layer-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(103,232,249,.72); }
+
+.airport-scrollbar-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  cursor: grab;
+  user-select: none;
+}
+.airport-scrollbar-hidden:active { cursor: grabbing; }
+.airport-scrollbar-hidden::-webkit-scrollbar { display: none; width: 0; height: 0; }
+
+.spatial-map-marker {
+  position: relative;
+  width: 17px;
+  height: 17px;
+  border: 3px solid #06111f;
+  border-radius: 999px;
+  background: var(--marker-color, #67e8f9);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--marker-color, #67e8f9) 44%, transparent), 0 0 22px var(--marker-color, #67e8f9);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.spatial-map-marker::after {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1px solid color-mix(in srgb, var(--marker-color, #67e8f9) 52%, transparent);
+  border-radius: 999px;
+  animation: airport-pulse-ring 2.1s ease-in-out infinite;
+}
+.spatial-map-marker:hover,
+.spatial-map-marker.is-active { transform: scale(1.25); box-shadow: 0 0 0 3px rgba(255,255,255,.34), 0 0 28px var(--marker-color, #67e8f9); }
+
+.maplibregl-ctrl-group,
+.maplibregl-popup-content { border: 1px solid rgba(255,255,255,.12) !important; background: rgba(6,17,31,.92) !important; color: #e2e8f0 !important; box-shadow: 0 12px 32px rgba(0,0,0,.38) !important; }
+.maplibregl-ctrl-group button { filter: invert(1) brightness(1.35); }
+.maplibregl-ctrl-attrib { background: rgba(6,17,31,.78) !important; color: #94a3b8 !important; }
+.maplibregl-ctrl-attrib a { color: #a5f3fc !important; }
+
+@keyframes airport-grid-drift { from { transform: translateY(0); } to { transform: translateY(42px); } }
+@keyframes airport-pulse-ring { 0%,100% { transform: scale(.9); opacity: .3; } 50% { transform: scale(1.35); opacity: .05; } }
+@keyframes airport-particle { 0% { transform: translate3d(0, 12px, 0); opacity: 0; } 25% { opacity: .5; } 100% { transform: translate3d(24px, -90px, 0); opacity: 0; } }
+
+@media (max-width: 1500px) {
+  .airport-platform .airport-dense-hide { display: none; }
+}
+
+/* Keep dense operational tables balanced across all airport modules. */
+.airport-platform table thead th,
+.airport-platform table thead button {
+  font-size: 8px !important;
+  line-height: 1.1 !important;
+  letter-spacing: .07em !important;
+  font-weight: 600 !important;
+}
