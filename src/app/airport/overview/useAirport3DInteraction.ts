@@ -12,22 +12,22 @@ export type Airport3DControlMode = "orbit" | "walk";
 
 export type Airport3DViewSettings = {
   cameraHeight: number;
+  walkHeight: number;
   distance: number;
   fov: number;
   brightness: number;
 };
 
 export const DEFAULT_AIRPORT_3D_VIEW_SETTINGS: Airport3DViewSettings = {
-  cameraHeight: 0.92,
-  distance: 0.58,
-  fov: 38,
-  brightness: 0.82,
+  cameraHeight: 1.5,
+  walkHeight: 4,
+  distance: 0.68,
+  fov: 36,
+  brightness: 0.3,
 };
 
-const VIEW_SETTINGS_STORAGE_KEY = "danang-htp-3d-view-settings-v2";
-const LEGACY_CAMERA_HEIGHT_BASE = 0.34;
-
-const DEFAULT_WALK_EYE_HEIGHT = 0.22;
+const VIEW_SETTINGS_STORAGE_KEY = "hospital-3d-view-settings-v3";
+const DEFAULT_WALK_EYE_HEIGHT = DEFAULT_AIRPORT_3D_VIEW_SETTINGS.walkHeight;
 
 function seededRandom(seed: number) {
   let value = seed >>> 0;
@@ -355,6 +355,7 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
     let walkEyeHeight = DEFAULT_WALK_EYE_HEIGHT;
     let walkGroundY = 0.02;
     let walkRayOriginY = 1000;
+    let walkMoveSpeed = 3;
     let walkBounds = new THREE.Box2(new THREE.Vector2(-10, -10), new THREE.Vector2(10, 10));
     let walkSpawn = new THREE.Vector3(0, walkGroundY + walkEyeHeight, 0);
     let walkLookTarget = new THREE.Vector3(1.4, walkGroundY + walkEyeHeight, -0.8);
@@ -559,7 +560,8 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
       const distanceForHeight = sphere.radius / Math.max(0.12, Math.sin(halfFov));
       const distanceForWidth = distanceForHeight / Math.max(camera.aspect, 0.75);
       const distance = Math.max(distanceForHeight, distanceForWidth) * padding;
-      const direction = new THREE.Vector3(1.06, viewSettingsRef.current.cameraHeight, 0.82).normalize();
+      const [orbitX, , orbitZ] = AIRPORT_3D_CONFIG.defaultCamera.orbitDirection;
+      const direction = new THREE.Vector3(orbitX, viewSettingsRef.current.cameraHeight, orbitZ).normalize();
       const position = center.clone().add(direction.multiplyScalar(distance));
       camera.near = Math.max(distance / 6000, 0.005);
       camera.far = Math.max(distance * 36, 1600);
@@ -580,11 +582,7 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
       renderer.toneMappingExposure = next.brightness;
       camera.fov = next.fov;
       camera.updateProjectionMatrix();
-      walkEyeHeight = THREE.MathUtils.clamp(
-        walkBaseEyeHeight * (next.cameraHeight / LEGACY_CAMERA_HEIGHT_BASE),
-        0.6,
-        1.8,
-      );
+      walkEyeHeight = Math.max(walkBaseEyeHeight, next.walkHeight);
       if (controlModeRef.current === "walk") {
         camera.position.y = walkGroundY + walkEyeHeight;
         walkLookTarget.y = camera.position.y;
@@ -763,6 +761,10 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
         const shiftedBox = new THREE.Box3().setFromObject(loadedRoot);
         loadedRoot.position.y -= shiftedBox.min.y;
         loadedRoot.position.y += 0.024;
+        loadedRoot.updateMatrixWorld(true);
+        const modelBox = new THREE.Box3().setFromObject(loadedRoot);
+        const modelSize = modelBox.getSize(new THREE.Vector3());
+        const modelHorizontalSize = Math.min(modelSize.x, modelSize.z);
 
         loadedRoot.traverse((object) => {
           if (!(object instanceof THREE.Mesh)) return;
@@ -771,9 +773,14 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
           originalMaterials.set(object, object.material);
           const materials = Array.isArray(object.material) ? object.material : [object.material];
           const searchable = `${object.name} ${object.parent?.name ?? ""} ${materialNames(object.material)}`.toLowerCase();
-          const isGroundSurface = /(grass|asphalt|runway|taxiway|apron|ground|terrain)/.test(searchable);
+          const objectSize = new THREE.Box3().setFromObject(object).getSize(new THREE.Vector3());
+          const isBroadHorizontalSurface = objectSize.x >= modelHorizontalSize * 0.25
+            && objectSize.z >= modelHorizontalSize * 0.25
+            && objectSize.y <= Math.max(0.5, modelSize.y * 0.03);
+          const isGroundSurface = /(grass|lawn|asphalt|road|pavement|parking|site|landscape|ground|terrain)/.test(searchable)
+            || isBroadHorizontalSurface;
           const isSurfaceOverlay = /(light|marking|line|decal|stripe)/.test(searchable);
-          const surfaceLayer = isSurfaceOverlay ? 4 : /runway/.test(searchable) ? 3 : /asphalt|taxiway|apron/.test(searchable) ? 2 : isGroundSurface ? 1 : 0;
+          const surfaceLayer = isSurfaceOverlay ? 4 : /asphalt|road|pavement|parking/.test(searchable) ? 2 : isGroundSurface ? 1 : 0;
           if (isGroundSurface || isSurfaceOverlay) {
             object.castShadow = false;
             object.renderOrder = surfaceLayer;
@@ -814,21 +821,18 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
         const overviewSize = overviewBox.getSize(new THREE.Vector3());
         const overviewCenter = overviewBox.getCenter(new THREE.Vector3());
         walkRayOriginY = overviewBox.max.y + Math.max(overviewSize.y * 2, 10);
-        walkBaseEyeHeight = THREE.MathUtils.clamp(Math.max(overviewSize.y * 0.21, Math.min(overviewSize.x, overviewSize.z) * 0.005), 0.2, 0.38);
-        walkEyeHeight = THREE.MathUtils.clamp(
-          walkBaseEyeHeight * (viewSettingsRef.current.cameraHeight / LEGACY_CAMERA_HEIGHT_BASE),
-          0.6,
-          1.8,
-        );
+        walkBaseEyeHeight = Math.max(3, overviewSize.y * 0.055);
+        walkEyeHeight = Math.max(walkBaseEyeHeight, viewSettingsRef.current.walkHeight);
+        walkMoveSpeed = THREE.MathUtils.clamp(Math.min(overviewSize.x, overviewSize.z) * 0.025, 3, 10);
         walkGroundY = overviewBox.min.y + 0.012;
         walkBounds = new THREE.Box2(
           new THREE.Vector2(overviewBox.min.x + 0.1, overviewBox.min.z + 0.1),
           new THREE.Vector2(overviewBox.max.x - 0.1, overviewBox.max.z - 0.1),
         );
         walkSpawn = new THREE.Vector3(
-          overviewCenter.x + overviewSize.x * 0.28,
+          overviewCenter.x + overviewSize.x * 0.12,
           walkGroundY + walkEyeHeight,
-          overviewCenter.z + overviewSize.z * 0.36,
+          overviewCenter.z + overviewSize.z * 0.16,
         );
         walkGroundY = getWalkGroundHeight(walkSpawn.x, walkSpawn.z, walkGroundY) + 0.018;
         walkSpawn.y = walkGroundY + walkEyeHeight;
@@ -962,7 +966,7 @@ export function useAirport3DInteraction(containerRef: React.RefObject<HTMLDivEle
       const delta = clock.getDelta();
       mixer?.update(delta);
       if (controlModeRef.current === "walk") {
-        const speed = movement.boost ? 2.25 : 1.3;
+        const speed = movement.boost ? walkMoveSpeed * 2.4 : walkMoveSpeed;
         if (movement.forward) walkControls.moveForward(speed * delta);
         if (movement.backward) walkControls.moveForward(-speed * delta);
         if (movement.left) walkControls.moveRight(-speed * delta);

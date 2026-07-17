@@ -6,7 +6,6 @@ import {
   SlidersHorizontal, Wind, X,
 } from "lucide-react";
 import { toast } from "sonner";
-import overviewImage from "@/assets/airport/Overview_HighTechPark.webp";
 import type { AirportModuleId, AirportStatus, SpatialNode } from "../config/airportRegistry";
 import {
   AIRPORT_HOTSPOTS, AIRPORT_LAYERS, AIRPORT_SPATIAL_HIERARCHY,
@@ -16,6 +15,8 @@ import { AIRPORT_OVERVIEW_KPIS, INCIDENTS, OPERATION_EVENTS, getParkTrend } from
 import { AirportPanel, AirportStatusBadge, AirportTimeline, AirportTrendChart } from "../shared/AirportUI";
 import { useAirportLanguage } from "../i18n/AirportLanguage";
 import { AirportOverview3D } from "./AirportOverview3D";
+
+const HOSPITAL_OVERVIEW_IMAGE_URL = "https://pub-ad3c98c8c26c4e95ad475279f7257940.r2.dev/Hospital-Digital-Twin.png";
 
 type InfoMode = "none" | "summary" | "insights" | "hierarchy" | "readiness" | "maturity";
 
@@ -150,7 +151,7 @@ export function AirportOverview({ viewMode, onViewModeChange, onOpenModule, acti
         <AirportOverview3D onBack2D={() => onViewModeChange("2d")} />
       ) : (
         <>
-          <img src={overviewImage} alt="Temporary hospital overview reference image" className="absolute inset-0 h-full w-full select-none object-cover object-center" draggable={false} />
+          <img src={HOSPITAL_OVERVIEW_IMAGE_URL} alt="Hospital digital twin overview" className="absolute inset-0 h-full w-full select-none object-cover object-center" draggable={false} />
           <div className="pointer-events-none absolute inset-0 bg-[#03101d]/5" />
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_52%,rgba(1,8,18,.58)_100%)]" />
           <div className="pointer-events-none absolute inset-0 opacity-[0.13]" style={{ backgroundImage: "linear-gradient(rgba(34,211,238,.15) 1px,transparent 1px),linear-gradient(90deg,rgba(34,211,238,.15) 1px,transparent 1px)", backgroundSize: "42px 42px" }} />

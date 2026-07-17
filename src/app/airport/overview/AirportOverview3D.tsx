@@ -81,14 +81,18 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
           </div>
           {settingsPanel === "camera" ? (
             <div className="mt-4 space-y-4">
-              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera</span><b className="text-cyan-200">{viewSettings.cameraHeight.toFixed(2)}</b></span><input aria-label="Camera height" type="range" min="0.72" max="1.50" step="0.01" value={viewSettings.cameraHeight} onChange={(event) => setViewSettings({ cameraHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              {controlMode === "walk" ? (
+                <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera Walk</span><b className="text-cyan-200">{viewSettings.walkHeight.toFixed(1)}</b></span><input aria-label="Walk camera height" type="range" min="3" max="10" step="0.1" value={viewSettings.walkHeight} onChange={(event) => setViewSettings({ walkHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              ) : (
+                <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera</span><b className="text-cyan-200">{viewSettings.cameraHeight.toFixed(2)}</b></span><input aria-label="Camera height" type="range" min="0.72" max="1.50" step="0.01" value={viewSettings.cameraHeight} onChange={(event) => setViewSettings({ cameraHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              )}
               <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Khoảng cách</span><b className="text-cyan-200">{viewSettings.distance.toFixed(2)}</b></span><input aria-label="Camera distance" type="range" min="0.42" max="1.05" step="0.01" value={viewSettings.distance} onChange={(event) => setViewSettings({ distance: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
               <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Góc nhìn</span><b className="text-cyan-200">{viewSettings.fov}°</b></span><input aria-label="Camera field of view" type="range" min="28" max="58" step="1" value={viewSettings.fov} onChange={(event) => setViewSettings({ fov: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
             </div>
           ) : (
             <div className="mt-4">
-              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ sáng model</span><b className="text-cyan-200">{Math.round(viewSettings.brightness * 100)}%</b></span><input aria-label="Model brightness" type="range" min="0.45" max="1.35" step="0.01" value={viewSettings.brightness} onChange={(event) => setViewSettings({ brightness: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
-              <div className="mt-3 grid grid-cols-3 gap-1.5">{[["Dịu", 0.65], ["Chuẩn", 0.82], ["Sáng", 1.08]].map(([label, value]) => <button key={String(label)} onClick={() => setViewSettings({ brightness: Number(value) })} className="rounded-lg border border-white/10 bg-white/[.035] px-2 py-2 text-[9px] text-slate-300 hover:border-cyan-400/25 hover:text-cyan-200">{label}</button>)}</div>
+              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ sáng model</span><b className="text-cyan-200">{Math.round(viewSettings.brightness * 100)}%</b></span><input aria-label="Model brightness" type="range" min="0.12" max="0.45" step="0.01" value={viewSettings.brightness} onChange={(event) => setViewSettings({ brightness: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              <div className="mt-3 grid grid-cols-3 gap-1.5">{[["Dịu", 0.18], ["Chuẩn", 0.3], ["Sáng", 0.45]].map(([label, value]) => <button key={String(label)} onClick={() => setViewSettings({ brightness: Number(value) })} className="rounded-lg border border-white/10 bg-white/[.035] px-2 py-2 text-[9px] text-slate-300 hover:border-cyan-400/25 hover:text-cyan-200">{label}</button>)}</div>
             </div>
           )}
           <button onClick={() => { resetViewSettings(); resetCamera(); }} className="airport-button mt-4 w-full justify-center"><RotateCcw size={13} /> Mặc định đẹp</button>
@@ -131,7 +135,7 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
           <p className="mt-2 text-[11px] leading-relaxed text-slate-300">
             {walkLocked
               ? "Walk FPS: W/A/S/D để di chuyển trên mặt sàn · giữ Shift để đi nhanh hơn · ESC để thoát chế độ nhìn chuột."
-              : "Nhấn vào không gian 3D để bắt đầu Walk mode kiểu first-person. Camera sẽ bám mặt sàn, đi chậm và dễ điều khiển hơn."}
+              : "Nhấn vào không gian 3D để bắt đầu Walk mode kiểu first-person. Camera sẽ bám mặt sàn; dùng WASD để di chuyển và giữ Shift để tăng tốc."}
           </p>
         </div>
       )}
