@@ -23,10 +23,10 @@ export const DEFAULT_AIRPORT_3D_VIEW_SETTINGS: Airport3DViewSettings = {
   walkHeight: AIRPORT_3D_CONFIG.defaultWalkCamera.eyeHeight,
   distance: 0.75,
   fov: 38,
-  brightness: 0.82,
+  brightness: 0.3,
 };
 
-const VIEW_SETTINGS_STORAGE_KEY = "hospital-3d-view-settings-v10";
+const VIEW_SETTINGS_STORAGE_KEY = "hospital-3d-view-settings-v11";
 const DEFAULT_WALK_EYE_HEIGHT = DEFAULT_AIRPORT_3D_VIEW_SETTINGS.walkHeight;
 
 function seededRandom(seed: number) {

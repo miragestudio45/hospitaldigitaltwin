@@ -19,7 +19,7 @@ export const AIRPORT_3D_CONFIG = {
     eyeHeight: 35.7897,
   },
   lighting: {
-    exposure: 0.82,
+    exposure: 0.3,
     environmentIntensity: 0.85,
     keyIntensity: 3.2,
     fillIntensity: 1.65,

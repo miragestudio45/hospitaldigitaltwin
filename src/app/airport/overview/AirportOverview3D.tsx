@@ -91,8 +91,8 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
             </div>
           ) : (
             <div className="mt-4">
-              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ sáng model</span><b className="text-cyan-200">{Math.round(viewSettings.brightness * 100)}%</b></span><input aria-label="Model brightness" type="range" min="0.12" max="1.2" step="0.01" value={viewSettings.brightness} onChange={(event) => setViewSettings({ brightness: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
-              <div className="mt-3 grid grid-cols-3 gap-1.5">{[["Dịu", 0.35], ["Chuẩn", 0.82], ["Sáng", 1.1]].map(([label, value]) => <button key={String(label)} onClick={() => setViewSettings({ brightness: Number(value) })} className="rounded-lg border border-white/10 bg-white/[.035] px-2 py-2 text-[9px] text-slate-300 hover:border-cyan-400/25 hover:text-cyan-200">{label}</button>)}</div>
+              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ sáng model</span><b className="text-cyan-200">{Math.round(viewSettings.brightness * 100)}%</b></span><input aria-label="Model brightness" type="range" min="0.12" max="0.45" step="0.01" value={viewSettings.brightness} onChange={(event) => setViewSettings({ brightness: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              <div className="mt-3 grid grid-cols-3 gap-1.5">{[["Dịu", 0.18], ["Chuẩn", 0.3], ["Sáng", 0.45]].map(([label, value]) => <button key={String(label)} onClick={() => setViewSettings({ brightness: Number(value) })} className="rounded-lg border border-white/10 bg-white/[.035] px-2 py-2 text-[9px] text-slate-300 hover:border-cyan-400/25 hover:text-cyan-200">{label}</button>)}</div>
             </div>
           )}
           <button onClick={() => { resetViewSettings(); resetCamera(); }} className="airport-button mt-4 w-full justify-center"><RotateCcw size={13} /> Mặc định đẹp</button>
