@@ -74,7 +74,7 @@ export const AIRPORT_MODULES: AirportModuleDefinition[] = [
     accent: "blue", defaultSection: "flow-command",
     sections: [
       { id: "flow-command", label: "Patient Flow Command Center", description: "Hospital-wide arrivals, transfers, bed demand, discharge and bottleneck overview", icon: Radar },
-      { id: "emergency-operations", label: "Emergency Department", description: "Triage, door-to-doctor, boarding, resuscitation bays and ambulance arrivals", icon: Siren },
+      { id: "emergency-operations", label: "Emergency Department", description: "Triage, door-to-doctor, admission holds, resuscitation bays and ambulance arrivals", icon: Siren },
       { id: "bed-management", label: "Bed Management", description: "Available, occupied, cleaning, blocked, isolation and discharge-pending beds", icon: Building2 },
       { id: "icu-operations", label: "ICU Operations", description: "ICU capacity, ventilators, isolation readiness, staffing and transfer planning", icon: Activity },
       { id: "operating-theatre", label: "Operating Theatre", description: "OR schedule, case progress, delays, turnover, PACU capacity and sterile instrument readiness", icon: Clock3 },

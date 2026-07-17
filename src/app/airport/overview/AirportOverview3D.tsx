@@ -82,11 +82,11 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
           {settingsPanel === "camera" ? (
             <div className="mt-4 space-y-4">
               {controlMode === "walk" ? (
-                <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera Walk</span><b className="text-cyan-200">{viewSettings.walkHeight.toFixed(1)}</b></span><input aria-label="Walk camera height" type="range" min="3" max="10" step="0.1" value={viewSettings.walkHeight} onChange={(event) => setViewSettings({ walkHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+                <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera Walk</span><b className="text-cyan-200">{viewSettings.walkHeight.toFixed(2)}</b></span><input aria-label="Walk camera height" type="range" min="-10" max="81.5794" step="0.01" value={viewSettings.walkHeight} onChange={(event) => setViewSettings({ walkHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
               ) : (
                 <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Độ cao camera</span><b className="text-cyan-200">{viewSettings.cameraHeight.toFixed(2)}</b></span><input aria-label="Camera height" type="range" min="0.72" max="1.50" step="0.01" value={viewSettings.cameraHeight} onChange={(event) => setViewSettings({ cameraHeight: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
               )}
-              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Khoảng cách</span><b className="text-cyan-200">{viewSettings.distance.toFixed(2)}</b></span><input aria-label="Camera distance" type="range" min="0.42" max="1.05" step="0.01" value={viewSettings.distance} onChange={(event) => setViewSettings({ distance: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
+              <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Khoảng cách</span><b className="text-cyan-200">{viewSettings.distance.toFixed(2)}</b></span><input aria-label="Camera distance" type="range" min="0.75" max="1.45" step="0.01" value={viewSettings.distance} onChange={(event) => setViewSettings({ distance: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
               <label className="block"><span className="flex justify-between text-[10px] text-slate-300"><span>Góc nhìn</span><b className="text-cyan-200">{viewSettings.fov}°</b></span><input aria-label="Camera field of view" type="range" min="28" max="58" step="1" value={viewSettings.fov} onChange={(event) => setViewSettings({ fov: Number(event.target.value) })} className="mt-2 w-full accent-cyan-300" /></label>
             </div>
           ) : (
@@ -102,7 +102,7 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
       {!AIRPORT_3D_CONFIG.modelUrl && (
         <div className="pointer-events-none absolute left-1/2 top-[16%] w-[520px] -translate-x-1/2 rounded-2xl border border-cyan-400/15 bg-[#071426]/72 p-5 text-center backdrop-blur-xl">
           <div className="mx-auto grid h-10 w-10 place-items-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300"><Box size={20} /></div>
-          <h3 className="mt-3 text-sm font-semibold text-white">{tr("High-tech park 3D model source is ready for integration")}</h3>
+          <h3 className="mt-3 text-sm font-semibold text-white">{tr("Hospital 3D model source is ready for integration")}</h3>
           <p className="mt-1 text-[11px] text-slate-400">{tr("The current reference model is retained temporarily. Replace modelUrl in airport3DConfig.ts when the official hospital GLB is available.")}</p>
         </div>
       )}

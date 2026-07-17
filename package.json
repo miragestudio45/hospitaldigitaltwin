@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
+    "audit:hospital": "node scripts/auditHospitalSections.mjs",
     "build": "vite build",
     "dev": "vite dev",
     "preview": "vite preview"

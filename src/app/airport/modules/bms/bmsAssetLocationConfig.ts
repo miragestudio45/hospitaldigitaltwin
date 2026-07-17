@@ -47,7 +47,7 @@ export const BMS_BUILDINGS: BmsBuilding[] = [
   { id: "mini-dc", name: "Hospital Data Center" },
 ];
 
-/** High-tech park zones that contain the currently viewed equipment type. */
+/** Hospital zones that contain the currently viewed equipment type. */
 export const ASSET_AVAILABLE_FLOORS: Record<string, BmsFloor[]> = {
   ahu: [
     { id: "t1-b1", name: "T1 · B1 Mechanical" },
@@ -75,7 +75,7 @@ export const ASSET_AVAILABLE_FLOORS: Record<string, BmsFloor[]> = {
   ],
 };
 
-/** High-tech park-specific location metadata used by the EBO / BMS workflow. */
+/** Hospital-specific location metadata used by the EBO / BMS workflow. */
 export interface AssetLocationInfo {
   code: string;
   building: string;
