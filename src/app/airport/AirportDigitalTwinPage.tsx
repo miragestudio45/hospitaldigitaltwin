@@ -101,11 +101,7 @@ function AirportDigitalTwinPageContent() {
           ? "h-full min-w-0 flex-1 overflow-hidden"
           : activeModule === "BMS"
             ? `h-full min-w-0 flex-1 overflow-hidden px-3 pt-2 ${activeSection === "bms-hvac" ? "pb-[72px]" : ""}`
-            : activeModule === "SPATIAL" && activeSection === "spatial-command"
-              ? "h-full min-w-0 flex-1 overflow-hidden px-4 pb-[72px] pt-4"
-            : activeModule === "ASSETS_FM" && activeSection === "bim-explorer"
-              ? "h-full min-w-0 flex-1 overflow-hidden px-4 pb-[72px] pt-4"
-            : "airport-scrollbar h-full min-w-0 flex-1 overflow-y-auto px-4 pb-24 pt-4"
+            : "airport-scrollbar h-full min-w-0 flex-1 overflow-x-hidden overflow-y-auto px-4 pb-24 pt-4"
         }>
           {activeModule === "OVERVIEW" ? (
             <AirportOverview

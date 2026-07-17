@@ -102,7 +102,7 @@ export function AirportOverview3D({ onBack2D }: { onBack2D: () => void }) {
       {!AIRPORT_3D_CONFIG.modelUrl && (
         <div className="pointer-events-none absolute left-1/2 top-[16%] w-[520px] -translate-x-1/2 rounded-2xl border border-cyan-400/15 bg-[#071426]/72 p-5 text-center backdrop-blur-xl">
           <div className="mx-auto grid h-10 w-10 place-items-center rounded-xl border border-cyan-400/20 bg-cyan-400/10 text-cyan-300"><Box size={20} /></div>
-          <h3 className="mt-3 text-sm font-semibold text-white">{tr("High-tech park 3D model source is ready for integration")}</h3>
+          <h3 className="mt-3 text-sm font-semibold text-white">{tr("Hospital 3D model source is ready for integration")}</h3>
           <p className="mt-1 text-[11px] text-slate-400">{tr("The current reference model is retained temporarily. Replace modelUrl in airport3DConfig.ts when the official hospital GLB is available.")}</p>
         </div>
       )}
